@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zoho Intelligence Reports</title>
+    <!-- Modern Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <!-- Lucide Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="main.css" />
+  </head>
+  <body>
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">UNIJOY REPORTS</div>
+      <ul class="nav-links">
+        <li class="nav-item">
+          <a class="nav-link active" onclick="switchReport('overview')" data-report="overview">
+            <i class="fas fa-chart-line"></i>
+            <span>Sales Overview</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" onclick="switchReport('clients')" data-report="clients">
+            <i class="fas fa-users"></i>
+            <span>Top Clients</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" onclick="switchReport('patterns')" data-report="patterns">
+            <i class="fas fa-redo"></i>
+            <span>Order Patterns</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" onclick="switchReport('avg_order')" data-report="avg_order">
+            <i class="fas fa-shopping-basket"></i>
+            <span>Average Order Size</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" onclick="switchReport('products')" data-report="products">
+            <i class="fas fa-box"></i>
+            <span>Product Sales</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" onclick="switchReport('pdc')" data-report="pdc">
+            <i class="fas fa-money-check-alt"></i>
+            <span>PDC Cheque</span>
+          </a>
+        </li>
+      </ul>
+      <div class="sidebar-footer">
+        <button id="refresh-btn" onclick="refreshData()" class="nav-link" style="width: 100%; border: none; background: transparent; justify-content: flex-start;">
+            <i class="fas fa-sync-alt" id="refresh-icon"></i>
+            <span>Refresh Data</span>
+        </button>
+      </div>
+      <div class="sidebar-status">
+        <div id="status-badge" class="badge badge-green" style="display: flex; align-items: center; gap: 8px;">
+            <div class="status-dot"></div>
+            <span>Live Monitoring</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <div id="content">
+        <!-- Dashboard content will be rendered here via main.js -->
+        <div style="display: flex; justify-content: center; align-items: center; height: 80vh;">
+            <div class="loader-container" style="text-align: center;">
+                <i class="fas fa-circle-notch fa-spin" style="font-size: 2rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                <p style="color: var(--text-muted); font-weight: 500;">Initializing dashboard components...</p>
+            </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Zoho JS SDK -->
+    <script src="https://live.zwidgets.com/js-sdk/1.5/ZohoEmbededAppSDK.min.js"></script>
+    <script src="main.js"></script>
+    <script>
+      // Initialize Zoho SDK
+      ZOHO.embeddedApp.on("PageLoad", function(data) {
+        console.log("Zoho environment ready:", data);
+        if (window.switchReport) {
+            window.switchReport('overview');
+        }
+      });
+      ZOHO.embeddedApp.init().then(() => {
+          console.log("Zoho SDK Initialized");
+      });
+    </script>
+  </body>
+</html>
