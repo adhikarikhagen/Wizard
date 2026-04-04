@@ -17,7 +17,13 @@
   <body>
     <!-- Sidebar Navigation -->
     <aside class="sidebar">
-      <div class="sidebar-header">UNIJOY REPORTS</div>
+      <button id="sidebar-toggle" onclick="toggleSidebar()">
+          <i class="fas fa-chevron-left"></i>
+      </button>
+
+      <div class="sidebar-header">
+        <span>UNIJOY REPORTS</span>
+      </div>
       <ul class="nav-links">
         <li class="nav-item">
           <a class="nav-link active" onclick="switchReport('overview')" data-report="overview">
@@ -35,12 +41,6 @@
           <a class="nav-link" onclick="switchReport('patterns')" data-report="patterns">
             <i class="fas fa-redo"></i>
             <span>Order Patterns</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" onclick="switchReport('avg_order')" data-report="avg_order">
-            <i class="fas fa-shopping-basket"></i>
-            <span>Average Order Size</span>
           </a>
         </li>
         <li class="nav-item">
@@ -83,20 +83,41 @@
       </div>
     </main>
 
+    <!-- Modal Overlay -->
+    <div id="modal-overlay" class="modal-overlay" onclick="closeModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
     <!-- Zoho JS SDK -->
     <script src="https://live.zwidgets.com/js-sdk/1.5/ZohoEmbededAppSDK.min.js"></script>
     <script src="main.js"></script>
     <script>
       // Initialize Zoho SDK
-      ZOHO.embeddedApp.on("PageLoad", function(data) {
+      ZOHO.embeddedApp.on("PageLoad", async function(data){
         console.log("Zoho environment ready:", data);
+     
+        if (window.detectEnvironment) {
+          
+            await window.detectEnvironment();
+        }
         if (window.switchReport) {
             window.switchReport('overview');
         }
       });
-      ZOHO.embeddedApp.init().then(() => {
-          console.log("Zoho SDK Initialized");
-      });
+      //Initializing the widget. 
+      ZOHO.embeddedApp.init();
+
+      // Force UI to load when testing locally without Zoho
+      setTimeout(() => {
+          if(window.location.hostname === "127.0.0.1" || window.location.hostname === "localhost"){
+              console.warn("Bypassing Zoho PageLoad for local UI testing");
+              if(window.switchReport) window.switchReport('overview');
+          }
+      }, 1000);
     </script>
+
   </body>
 </html>
