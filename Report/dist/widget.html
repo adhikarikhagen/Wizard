@@ -97,10 +97,7 @@
     <script>
       // Initialize Zoho SDK
       ZOHO.embeddedApp.on("PageLoad", async function(data){
-        console.log("Zoho environment ready:", data);
-     
         if (window.detectEnvironment) {
-          
             await window.detectEnvironment();
         }
         if (window.switchReport) {
@@ -113,7 +110,6 @@
       // Force UI to load when testing locally without Zoho
       setTimeout(() => {
           if(window.location.hostname === "127.0.0.1" || window.location.hostname === "localhost"){
-              console.warn("Bypassing Zoho PageLoad for local UI testing");
               if(window.switchReport) window.switchReport('overview');
           }
       }, 1000);
